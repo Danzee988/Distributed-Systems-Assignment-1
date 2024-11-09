@@ -70,9 +70,40 @@ export class RestAPIStack extends cdk.Stack {
       }
       );
 
+      const getBookByIdFn = new lambdanode.NodejsFunction(
+        this,
+        "GetBookByIdFn",
+        {
+          architecture: lambda.Architecture.ARM_64,
+          runtime: lambda.Runtime.NODEJS_18_X,
+          entry: `${__dirname}/../lambdas/getBookById.ts`,
+          timeout: cdk.Duration.seconds(10),
+          memorySize: 128,
+          environment: {
+            TABLE_NAME: booksTable.tableName,
+            REGION: 'eu-west-1',
+          },
+        }
+        );
+
+      const deleteBookFn = new lambdanode.NodejsFunction(this, "DeleteBookFn", {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_16_X,
+        entry: `${__dirname}/../lambdas/deleteBook.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: booksTable.tableName,
+          REGION: "eu-west-1",
+        },
+      });
+
     // Permissions
     booksTable.grantReadWriteData(newBookFn);
     booksTable.grantReadWriteData(getAllBooksFn);
+    booksTable.grantReadWriteData(deleteBookFn);
+    booksTable.grantReadWriteData(getBookByIdFn);
+    
 
     // Rest API
     const api = new apig.RestApi(this, "RestAPI", {
@@ -99,6 +130,17 @@ export class RestAPIStack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getAllBooksFn, { proxy: true })
     );
+
+    const bookEndpoint = booksEndpoint.addResource("{bookId}");
+        bookEndpoint.addMethod(
+          "GET",
+          new apig.LambdaIntegration(getBookByIdFn, { proxy: true })
+        );
+
+        bookEndpoint.addMethod(
+          "DELETE",
+          new apig.LambdaIntegration(deleteBookFn, { proxy: true })
+        );
 
     }
 }
