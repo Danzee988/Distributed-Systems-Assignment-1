@@ -98,13 +98,25 @@ export class RestAPIStack extends cdk.Stack {
         },
       });
 
+      const updateBookFn = new lambdanode.NodejsFunction(this, "updateBookFn", {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_16_X,
+        entry: `${__dirname}/../lambdas/updateBook.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: booksTable.tableName,
+          REGION: "eu-west-1",
+        },
+      });
+
     // Permissions
     booksTable.grantReadWriteData(newBookFn);
     booksTable.grantReadWriteData(getAllBooksFn);
     booksTable.grantReadWriteData(deleteBookFn);
     booksTable.grantReadWriteData(getBookByIdFn);
+    booksTable.grantReadWriteData(updateBookFn);
     
-
     // Rest API
     const api = new apig.RestApi(this, "RestAPI", {
       description: "demo api",
@@ -142,5 +154,9 @@ export class RestAPIStack extends cdk.Stack {
           new apig.LambdaIntegration(deleteBookFn, { proxy: true })
         );
 
+        bookEndpoint.addMethod(
+          "PUT",
+          new apig.LambdaIntegration(updateBookFn, { proxy: true })
+        );
     }
 }
