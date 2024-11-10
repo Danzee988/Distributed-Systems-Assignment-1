@@ -12,7 +12,7 @@ type AppApiProps = {
 
 export class AppApi extends Construct {
   constructor(scope: Construct, id: string, props: AppApiProps) {
-    super(scope, id);
+    super(scope, id,);
 
     const appApi = new apig.RestApi(this, "AppApi", {
       description: "App RestApi",
@@ -29,7 +29,7 @@ export class AppApi extends Construct {
       runtime: lambda.Runtime.NODEJS_16_X,
       handler: "handler",
       environment: {
-        USER_POOL_ID: props.userPoolId,
+        USER_POOL_ID: props.userPoolId,  
         CLIENT_ID: props.userPoolClientId,
         REGION: cdk.Aws.REGION,
       },

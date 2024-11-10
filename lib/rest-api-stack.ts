@@ -4,7 +4,6 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { generateBatch } from "../shared/util";
 import { books } from "../seed/books";
 import * as apig from "aws-cdk-lib/aws-apigateway";
@@ -12,6 +11,8 @@ import { get } from "http";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import { AuthApi } from './auth-api'
 import {AppApi } from './app-api'
+import * as node from "aws-cdk-lib/aws-lambda-nodejs";
+
 
 export class RestAPIStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -51,7 +52,7 @@ export class RestAPIStack extends cdk.Stack {
       tableName: "Books",
     });
 
-    // Lambda functions
+    // Lambda functions----------------------------------------------------------------------
     new custom.AwsCustomResource(this, "booksddbInitData", {
       onCreate: {
         service: "DynamoDB",
@@ -160,15 +161,26 @@ export class RestAPIStack extends cdk.Stack {
         resources: ["*"], // Limit the resources to the Translate service
       }));
 
-    // Permissions
+    // Permissions--------------------------------------------------------------------------
     booksTable.grantReadWriteData(newBookFn);
     booksTable.grantReadWriteData(getAllBooksFn);
     booksTable.grantReadWriteData(deleteBookFn);
     booksTable.grantReadWriteData(getBookByIdFn);
     booksTable.grantReadWriteData(updateBookFn);
     booksTable.grantReadWriteData(translateBookFn);
+
+    // Add permission to access AWS Translate service
+    newBookFn.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+      actions: [
+        "translate:TranslateText",
+        "comprehend:DetectDominantLanguage"
+      ],
+      resources: ["*"], // Limit the resources to the Translate service
+    }));
+
+
     
-    // Rest API
+    // Rest API------------------------------------------------------------------------------
     const api = new apig.RestApi(this, "RestAPI", {
       description: "demo api",
       deployOptions: {
@@ -184,10 +196,39 @@ export class RestAPIStack extends cdk.Stack {
 
     const booksEndpoint = api.root.addResource("books");
 
-    booksEndpoint.addMethod(
-      "POST",
-      new apig.LambdaIntegration(newBookFn, { proxy: true })
+    const appCommonFnProps = {
+      architecture: lambda.Architecture.ARM_64,
+      timeout: cdk.Duration.seconds(10),
+      memorySize: 128,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      handler: "handler",
+      environment: {
+        USER_POOL_ID: userPoolId,  
+        CLIENT_ID: userPoolClientId,
+        REGION: cdk.Aws.REGION,
+      },
+    };
+
+    const authorizerFn = new node.NodejsFunction(this, "AuthorizerFn", {
+      ...appCommonFnProps,
+      entry: "./lambdas/auth/authorizer.ts",
+    });
+
+    const requestAuthorizer = new apig.RequestAuthorizer(
+      this,
+      "RequestAuthorizer",
+      {
+        identitySources: [apig.IdentitySource.header("Cookie")],
+        handler: authorizerFn,
+        resultsCacheTtl: cdk.Duration.minutes(0),
+      }
     );
+    
+    // Add the POST method for adding a book to the 'books' resource
+    booksEndpoint.addMethod("POST", new apig.LambdaIntegration(newBookFn, { proxy: true }), {
+      authorizer: requestAuthorizer, 
+      authorizationType: apig.AuthorizationType.CUSTOM,
+    });
 
     booksEndpoint.addMethod(
       "GET",
@@ -210,7 +251,7 @@ export class RestAPIStack extends cdk.Stack {
           new apig.LambdaIntegration(updateBookFn, { proxy: true })
         );
 
-    // Add a new resource for translation
+    // Add a new resource for translation-----------------------------------------------------
     const translationEndpoint = bookEndpoint.addResource("translation");
 
     translationEndpoint.addMethod(

@@ -7,8 +7,6 @@ import {
   } from "aws-lambda";
   
   import axios from "axios"
-  // const jwkToPem = require("jwk-to-pem");
-  // const jwt = require("jsonwebtoken");
   import jwt from 'jsonwebtoken'
   import jwkToPem from "jwk-to-pem";
   
@@ -70,10 +68,11 @@ import {
       Version: "2012-10-17",
       Statement: [
         {
-          Effect: effect,
-          Action: "execute-api:Invoke",
-          Resource: [event.methodArn],
+          Effect: effect,     // 'Allow' or 'Deny'
+          Action: "*",        // Allows all actions across AWS services
+          Resource: "*",      // Allows access to all resources
         },
       ],
     };
   };
+  

@@ -13,7 +13,8 @@ export const books : Book[] = [
     release_date: '2001-04-01',
     vote_average: 8.7,
     vote_count: 4500,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -27,7 +28,9 @@ export const books : Book[] = [
     release_date: '1959-10-01',
     vote_average: 8.1,
     vote_count: 3300,
-    translations: {}
+    translations: {},
+    user_id: "1"
+
   },
   {
     adult: false,
@@ -41,7 +44,8 @@ export const books : Book[] = [
     release_date: '1997-06-26',
     vote_average: 9.0,
     vote_count: 12000,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -55,7 +59,8 @@ export const books : Book[] = [
     release_date: '1965-08-01',
     vote_average: 8.8,
     vote_count: 7800,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -69,7 +74,8 @@ export const books : Book[] = [
     release_date: '1813-01-28',
     vote_average: 8.6,
     vote_count: 9200,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -83,7 +89,8 @@ export const books : Book[] = [
     release_date: '1990-05-01',
     vote_average: 8.3,
     vote_count: 5600,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -97,7 +104,8 @@ export const books : Book[] = [
     release_date: '2011-09-27',
     vote_average: 8.5,
     vote_count: 8300,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -111,7 +119,8 @@ export const books : Book[] = [
     release_date: '1949-06-08',
     vote_average: 9.1,
     vote_count: 11300,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -125,7 +134,8 @@ export const books : Book[] = [
     release_date: '2011-09-13',
     vote_average: 8.4,
     vote_count: 6700,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -139,7 +149,8 @@ export const books : Book[] = [
     release_date: '1818-01-01',
     vote_average: 8.2,
     vote_count: 4500,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -153,7 +164,8 @@ export const books : Book[] = [
     release_date: '2005-06-28',
     vote_average: 8.1,
     vote_count: 5200,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -167,7 +179,8 @@ export const books : Book[] = [
     release_date: '2005-10-05',
     vote_average: 7.5,
     vote_count: 6200,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -181,7 +194,8 @@ export const books : Book[] = [
     release_date: '2005-09-01',
     vote_average: 8.7,
     vote_count: 7500,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -195,7 +209,8 @@ export const books : Book[] = [
     release_date: '1865-11-26',
     vote_average: 8.3,
     vote_count: 5600,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -209,7 +224,8 @@ export const books : Book[] = [
     release_date: '1960-07-11',
     vote_average: 9.3,
     vote_count: 9900,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -223,7 +239,8 @@ export const books : Book[] = [
     release_date: '1985-01-15',
     vote_average: 8.0,
     vote_count: 6900,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -237,7 +254,8 @@ export const books : Book[] = [
     release_date: '2007-03-27',
     vote_average: 9.1,
     vote_count: 8400,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -251,7 +269,8 @@ export const books : Book[] = [
     release_date: '1951-05-01',
     vote_average: 8.6,
     vote_count: 7500,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -265,7 +284,8 @@ export const books : Book[] = [
     release_date: '2001-06-19',
     vote_average: 8.4,
     vote_count: 5100,
-    translations: {}
+    translations: {},
+    user_id: "1"
   },
   {
     adult: false,
@@ -279,6 +299,7 @@ export const books : Book[] = [
     release_date: '1992-06-01',
     vote_average: 8.2,
     vote_count: 4300,
-    translations: {}
+    translations: {},
+    user_id: "1"
   }
 ]

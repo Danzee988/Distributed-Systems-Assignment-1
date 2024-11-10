@@ -19,6 +19,9 @@
                 "id": {
                     "type": "number"
                 },
+                "user_id": {
+                    "type": "string"
+                },
                 "original_language": {
                     "type": "string"
                 },
