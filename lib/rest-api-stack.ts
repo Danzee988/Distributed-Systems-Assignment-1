@@ -110,12 +110,34 @@ export class RestAPIStack extends cdk.Stack {
         },
       });
 
+      const translateBookFn = new lambdanode.NodejsFunction(this, "translateBookFn", {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_16_X,
+        entry: `${__dirname}/../lambdas/translateBook.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: booksTable.tableName,
+          REGION: "eu-west-1",
+        },
+      });
+
+      // Add permission to access AWS Translate service
+      translateBookFn.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+        actions: [
+          "translate:TranslateText",
+          "comprehend:DetectDominantLanguage"
+        ],
+        resources: ["*"], // Limit the resources to the Translate service
+      }));
+
     // Permissions
     booksTable.grantReadWriteData(newBookFn);
     booksTable.grantReadWriteData(getAllBooksFn);
     booksTable.grantReadWriteData(deleteBookFn);
     booksTable.grantReadWriteData(getBookByIdFn);
     booksTable.grantReadWriteData(updateBookFn);
+    booksTable.grantReadWriteData(translateBookFn);
     
     // Rest API
     const api = new apig.RestApi(this, "RestAPI", {
@@ -158,5 +180,13 @@ export class RestAPIStack extends cdk.Stack {
           "PUT",
           new apig.LambdaIntegration(updateBookFn, { proxy: true })
         );
+
+    // Add a new resource for translation
+    const translationEndpoint = bookEndpoint.addResource("translation");
+
+    translationEndpoint.addMethod(
+      "PUT",
+      new apig.LambdaIntegration(translateBookFn, { proxy: true })
+    );
     }
 }

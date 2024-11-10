@@ -48,6 +48,17 @@
                 },
                 "vote_count": {
                     "type": "number"
+                },
+                "translations": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                        "title": { "type": "string" },
+                        "overview": { "type": "string" }
+                        },
+                        "additionalProperties": false
+                    }
                 }
             },
             "required": [

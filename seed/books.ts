@@ -12,7 +12,8 @@ export const books : Book[] = [
     popularity: 892.5,
     release_date: '2001-04-01',
     vote_average: 8.7,
-    vote_count: 4500
+    vote_count: 4500,
+    translations: {}
   },
   {
     adult: false,
@@ -25,7 +26,8 @@ export const books : Book[] = [
     popularity: 773.1,
     release_date: '1959-10-01',
     vote_average: 8.1,
-    vote_count: 3300
+    vote_count: 3300,
+    translations: {}
   },
   {
     adult: false,
@@ -38,7 +40,8 @@ export const books : Book[] = [
     popularity: 2305.4,
     release_date: '1997-06-26',
     vote_average: 9.0,
-    vote_count: 12000
+    vote_count: 12000,
+    translations: {}
   },
   {
     adult: false,
@@ -51,7 +54,8 @@ export const books : Book[] = [
     popularity: 1893.6,
     release_date: '1965-08-01',
     vote_average: 8.8,
-    vote_count: 7800
+    vote_count: 7800,
+    translations: {}
   },
   {
     adult: false,
@@ -64,7 +68,8 @@ export const books : Book[] = [
     popularity: 1322.7,
     release_date: '1813-01-28',
     vote_average: 8.6,
-    vote_count: 9200
+    vote_count: 9200,
+    translations: {}
   },
   {
     adult: false,
@@ -77,7 +82,8 @@ export const books : Book[] = [
     popularity: 1500.4,
     release_date: '1990-05-01',
     vote_average: 8.3,
-    vote_count: 5600
+    vote_count: 5600,
+    translations: {}
   },
   {
     adult: false,
@@ -90,7 +96,8 @@ export const books : Book[] = [
     popularity: 1692.8,
     release_date: '2011-09-27',
     vote_average: 8.5,
-    vote_count: 8300
+    vote_count: 8300,
+    translations: {}
   },
   {
     adult: false,
@@ -103,7 +110,8 @@ export const books : Book[] = [
     popularity: 2411.2,
     release_date: '1949-06-08',
     vote_average: 9.1,
-    vote_count: 11300
+    vote_count: 11300,
+    translations: {}
   },
   {
     adult: false,
@@ -116,7 +124,8 @@ export const books : Book[] = [
     popularity: 1098.4,
     release_date: '2011-09-13',
     vote_average: 8.4,
-    vote_count: 6700
+    vote_count: 6700,
+    translations: {}
   },
   {
     adult: false,
@@ -129,7 +138,8 @@ export const books : Book[] = [
     popularity: 1520.6,
     release_date: '1818-01-01',
     vote_average: 8.2,
-    vote_count: 4500
+    vote_count: 4500,
+    translations: {}
   },
   {
     adult: false,
@@ -142,7 +152,8 @@ export const books : Book[] = [
     popularity: 1852.9,
     release_date: '2005-06-28',
     vote_average: 8.1,
-    vote_count: 5200
+    vote_count: 5200,
+    translations: {}
   },
   {
     adult: false,
@@ -155,7 +166,8 @@ export const books : Book[] = [
     popularity: 2430.2,
     release_date: '2005-10-05',
     vote_average: 7.5,
-    vote_count: 6200
+    vote_count: 6200,
+    translations: {}
   },
   {
     adult: false,
@@ -168,7 +180,8 @@ export const books : Book[] = [
     popularity: 1602.7,
     release_date: '2005-09-01',
     vote_average: 8.7,
-    vote_count: 7500
+    vote_count: 7500,
+    translations: {}
   },
   {
     adult: false,
@@ -181,7 +194,8 @@ export const books : Book[] = [
     popularity: 1720.4,
     release_date: '1865-11-26',
     vote_average: 8.3,
-    vote_count: 5600
+    vote_count: 5600,
+    translations: {}
   },
   {
     adult: false,
@@ -194,7 +208,8 @@ export const books : Book[] = [
     popularity: 2354.5,
     release_date: '1960-07-11',
     vote_average: 9.3,
-    vote_count: 9900
+    vote_count: 9900,
+    translations: {}
   },
   {
     adult: false,
@@ -207,7 +222,8 @@ export const books : Book[] = [
     popularity: 1930.2,
     release_date: '1985-01-15',
     vote_average: 8.0,
-    vote_count: 6900
+    vote_count: 6900,
+    translations: {}
   },
   {
     adult: false,
@@ -220,7 +236,8 @@ export const books : Book[] = [
     popularity: 2105.6,
     release_date: '2007-03-27',
     vote_average: 9.1,
-    vote_count: 8400
+    vote_count: 8400,
+    translations: {}
   },
   {
     adult: false,
@@ -233,7 +250,8 @@ export const books : Book[] = [
     popularity: 1483.7,
     release_date: '1951-05-01',
     vote_average: 8.6,
-    vote_count: 7500
+    vote_count: 7500,
+    translations: {}
   },
   {
     adult: false,
@@ -246,7 +264,8 @@ export const books : Book[] = [
     popularity: 1748.2,
     release_date: '2001-06-19',
     vote_average: 8.4,
-    vote_count: 5100
+    vote_count: 5100,
+    translations: {}
   },
   {
     adult: false,
@@ -259,6 +278,7 @@ export const books : Book[] = [
     popularity: 1635.9,
     release_date: '1992-06-01',
     vote_average: 8.2,
-    vote_count: 4300
+    vote_count: 4300,
+    translations: {}
   }
 ]
