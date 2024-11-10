@@ -1,8 +1,9 @@
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import Ajv from "ajv";
 import schema from "../shared/types.schema.json";
+import jwt from "jsonwebtoken"; // Import jwt to decode the token
 
 // Initialize DynamoDB Document Client and JSON Schema Validator
 const ddbDocClient = createDDbDocClient();
@@ -25,15 +26,71 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       };
     }
 
-    // Remove the 'id' field from the body to avoid updating it
-    delete body.id;
-
     // Validate the remaining request body against schema
     if (!validateBook(body)) {
       return {
         statusCode: 400,
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ message: "Invalid request body", errors: validateBook.errors }),
+      };
+    }
+
+    // Extract the token from the Cookie header
+    const token = getCookie(event.headers, 'token');
+    if (!token) {
+      return {
+        statusCode: 401,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ message: "Authorization token missing" }),
+      };
+    }
+
+    // Decode the JWT token to extract the user_id
+    let userId;
+    try {
+      const decodedToken = jwt.decode(token) as { sub: string };
+      userId = decodedToken?.sub;
+    } catch (error) {
+      console.error("Failed to decode token:", error);
+      return {
+        statusCode: 401,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ message: "Invalid token" }),
+      };
+    }
+
+    // Fetch the book from DynamoDB
+    const getBookOutput = await ddbDocClient.send(
+      new GetCommand({
+        TableName: process.env.TABLE_NAME,
+        Key: { id: bookId },
+      })
+    );
+
+    // If the book does not exist, return a 404
+    if (!getBookOutput.Item) {
+      return {
+        statusCode: 404,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ message: "Book not found" }),
+      };
+    }
+
+    // Check if the user_id in the book matches the user_id from the token
+    const bookUserId = getBookOutput.Item.user_id;
+    if (userId !== bookUserId) {
+      return {
+        statusCode: 403,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ message: "You are not authorized to update this book" }),
       };
     }
 
@@ -87,4 +144,17 @@ function createDDbDocClient() {
   const unmarshallOptions = { wrapNumbers: false };
   const translateConfig = { marshallOptions, unmarshallOptions };
   return DynamoDBDocumentClient.from(ddbClient, translateConfig);
+}
+
+// Helper function to get the token from cookies
+function getCookie(headers: { [key: string]: string | undefined }, cookieName: string): string | undefined {
+  const cookies = headers['Cookie'] || '';
+  const cookieArray = cookies.split(';');
+  for (const cookie of cookieArray) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === cookieName) {
+      return value;
+    }
+  }
+  return undefined;
 }

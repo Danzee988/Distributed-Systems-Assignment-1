@@ -13,7 +13,6 @@ import { AuthApi } from './auth-api'
 import {AppApi } from './app-api'
 import * as node from "aws-cdk-lib/aws-lambda-nodejs";
 
-
 export class RestAPIStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
