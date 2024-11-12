@@ -88,7 +88,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ message: "Book added" }),
+      body: JSON.stringify({ message: "Book added", userId: userId }),
     };
   } catch (error: any) {
     console.log("Error:", JSON.stringify(error));

@@ -5,7 +5,7 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import { generateBatch } from "../shared/util";
-import { books } from "../seed/books";
+import { books, bookCharacters } from "../seed/books";
 import * as apig from "aws-cdk-lib/aws-apigateway";
 import { get } from "http";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
@@ -51,6 +51,19 @@ export class RestAPIStack extends cdk.Stack {
       tableName: "Books",
     });
 
+    const bookCastsTable = new dynamodb.Table(this, "BookCastTable", {
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      partitionKey: { name: "bookId", type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: "name", type: dynamodb.AttributeType.STRING },
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "BookCast",
+    });
+
+    bookCastsTable.addLocalSecondaryIndex({
+      indexName: "roleIx",
+      sortKey: { name: "roleName", type: dynamodb.AttributeType.STRING },
+    });
+
     // Lambda functions----------------------------------------------------------------------
     new custom.AwsCustomResource(this, "booksddbInitData", {
       onCreate: {
@@ -59,6 +72,7 @@ export class RestAPIStack extends cdk.Stack {
         parameters: {
           RequestItems: {
             [booksTable.tableName]: generateBatch(books),
+            [bookCastsTable.tableName]: generateBatch(bookCharacters),
           },
         },
         physicalResourceId: custom.PhysicalResourceId.of("booksddbInitData"),
@@ -66,7 +80,7 @@ export class RestAPIStack extends cdk.Stack {
       policy: custom.AwsCustomResourcePolicy.fromStatements([
         new cdk.aws_iam.PolicyStatement({
           actions: ["dynamodb:BatchWriteItem"],
-          resources: [booksTable.tableArn],
+          resources: [booksTable.tableArn, bookCastsTable.tableArn],
         }),
       ]),
     });
@@ -110,6 +124,7 @@ export class RestAPIStack extends cdk.Stack {
           memorySize: 128,
           environment: {
             TABLE_NAME: booksTable.tableName,
+            CAST_TABLE_NAME: bookCastsTable.tableName,
             REGION: 'eu-west-1',
           },
         }
@@ -151,14 +166,21 @@ export class RestAPIStack extends cdk.Stack {
         },
       });
 
-      // Add permission to access AWS Translate service
-      translateBookFn.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
-        actions: [
-          "translate:TranslateText",
-          "comprehend:DetectDominantLanguage"
-        ],
-        resources: ["*"], // Limit the resources to the Translate service
-      }));
+      const getBookCastMembersFn = new lambdanode.NodejsFunction(
+        this,
+        "GetCastMemberFn",
+        {
+          architecture: lambda.Architecture.ARM_64,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          entry: `${__dirname}/../lambdas/getBookCastMember.ts`,
+          timeout: cdk.Duration.seconds(10),
+          memorySize: 128,
+          environment: {
+            TABLE_NAME: bookCastsTable.tableName,
+            REGION: "eu-west-1",
+          },
+        }
+      );
 
     // Permissions--------------------------------------------------------------------------
     booksTable.grantReadWriteData(newBookFn);
@@ -167,6 +189,18 @@ export class RestAPIStack extends cdk.Stack {
     booksTable.grantReadWriteData(getBookByIdFn);
     booksTable.grantReadWriteData(updateBookFn);
     booksTable.grantReadWriteData(translateBookFn);
+    booksTable.grantReadWriteData(getBookCastMembersFn);
+
+    bookCastsTable.grantReadWriteData(getBookCastMembersFn);
+    bookCastsTable.grantReadWriteData(getBookByIdFn);
+    // Add permission to access AWS Translate service
+    translateBookFn.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+      actions: [
+        "translate:TranslateText",
+        "comprehend:DetectDominantLanguage"
+      ],
+      resources: ["*"], // Limit the resources to the Translate service
+    }));
 
     // Add permission to access AWS Translate service
     newBookFn.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
@@ -250,11 +284,17 @@ export class RestAPIStack extends cdk.Stack {
           new apig.LambdaIntegration(updateBookFn, { proxy: true })
         );
 
+    const bookCastEndpoint = bookEndpoint.addResource("cast");
+        bookCastEndpoint.addMethod(
+            "GET",
+            new apig.LambdaIntegration(getBookCastMembersFn, { proxy: true })
+        );
+
     // Add a new resource for translation-----------------------------------------------------
     const translationEndpoint = bookEndpoint.addResource("translation");
 
     translationEndpoint.addMethod(
-      "PUT",
+      "GET",
       new apig.LambdaIntegration(translateBookFn, { proxy: true })
     );
     }

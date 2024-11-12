@@ -77,7 +77,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ message: "You are not authorized to delete this book" }),
+        body: JSON.stringify({ message: "You are not authorized to delete this book", userId: userId }),
       };
     }
 
@@ -94,7 +94,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ message: "Book deleted" }),
+      body: JSON.stringify({ message: "Book deleted", userId: userId }),
     };
   } catch (error: any) {
     console.error("Error:", JSON.stringify(error));

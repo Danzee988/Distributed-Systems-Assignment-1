@@ -1,4 +1,4 @@
-import {Book} from '../shared/types'
+import {Book, BookCharacters} from '../shared/types'
 
 export const books : Book[] = [
   {
@@ -212,94 +212,43 @@ export const books : Book[] = [
     translations: {},
     user_id: "1"
   },
+]
+
+export const bookCharacters: BookCharacters[] = [
   {
-    adult: false,
-    id: 15,
-    genre_ids: [ 18, 10749 ],
-    title: 'To Kill a Mockingbird',
-    original_language: 'en',
-    original_title: 'To Kill a Mockingbird',
-    overview: 'A young girl observes her father’s struggle for justice and equality in the racially divided American South.',
-    popularity: 2354.5,
-    release_date: '1960-07-11',
-    vote_average: 9.3,
-    vote_count: 9900,
-    translations: {},
-    user_id: "1"
+    "bookId": 1,
+    "name": "Daniel Sempere",
+    "roleName": "Male",
+    "roleDescription": "A young boy who discovers a mysterious book in the Cemetery of Forgotten Books, leading him into a web of dark secrets in post-war Barcelona."
   },
   {
-    adult: false,
-    id: 16,
-    genre_ids: [ 28, 878 ],
-    title: 'Ender\'s Game',
-    original_language: 'en',
-    original_title: 'Ender\'s Game',
-    overview: 'A young boy is recruited into a space academy where he must master complex tactics to prepare for an alien invasion.',
-    popularity: 1930.2,
-    release_date: '1985-01-15',
-    vote_average: 8.0,
-    vote_count: 6900,
-    translations: {},
-    user_id: "1"
+    "bookId": 1,
+    "name": "Bea Aguilar",
+    "roleName": "Female",
+    "roleDescription": "Daniel's love interest, who shares his passion for literature and becomes an important part of his journey to uncover the truth."
   },
   {
-    adult: false,
-    id: 17,
-    genre_ids: [ 28, 14 ],
-    title: 'The Name of the Wind',
-    original_language: 'en',
-    original_title: 'The Name of the Wind',
-    overview: 'A man recounts his adventures in a world of magic, mystery, and danger.',
-    popularity: 2105.6,
-    release_date: '2007-03-27',
-    vote_average: 9.1,
-    vote_count: 8400,
-    translations: {},
-    user_id: "1"
+    "bookId": 2,
+    "name": "Eleanor Vance",
+    "roleName": "Female",
+    "roleDescription": "A reserved and troubled woman who joins the investigation of Hill House, where her vulnerability makes her particularly susceptible to its supernatural forces."
   },
   {
-    adult: false,
-    id: 18,
-    genre_ids: [ 878, 12 ],
-    title: 'Foundation',
-    original_language: 'en',
-    original_title: 'Foundation',
-    overview: 'In a galaxy-spanning empire, a visionary scientist establishes a foundation to preserve knowledge and rebuild society.',
-    popularity: 1483.7,
-    release_date: '1951-05-01',
-    vote_average: 8.6,
-    vote_count: 7500,
-    translations: {},
-    user_id: "1"
+    "bookId": 2,
+    "name": "Dr. John Montague",
+    "roleName": "Male",
+    "roleDescription": "A paranormal investigator who organizes a stay at Hill House, hoping to document its haunted nature and uncover its mysteries."
   },
   {
-    adult: false,
-    id: 19,
-    genre_ids: [ 14, 18 ],
-    title: 'American Gods',
-    original_language: 'en',
-    original_title: 'American Gods',
-    overview: 'A man embarks on a road trip with a mysterious stranger, discovering a hidden world of gods and mythologies.',
-    popularity: 1748.2,
-    release_date: '2001-06-19',
-    vote_average: 8.4,
-    vote_count: 5100,
-    translations: {},
-    user_id: "1"
+    "bookId": 3,
+    "name": "Harry Potter",
+    "roleName": "Male",
+    "roleDescription": "An orphaned boy who learns he is a wizard, leading him to attend Hogwarts School of Witchcraft and Wizardry, where he discovers his connection to a dark wizard."
   },
   {
-    adult: false,
-    id: 20,
-    genre_ids: [ 878, 28 ],
-    title: 'Snow Crash',
-    original_language: 'en',
-    original_title: 'Snow Crash',
-    overview: 'A computer virus threatens a virtual world, and a hacker must stop it before it spreads to reality.',
-    popularity: 1635.9,
-    release_date: '1992-06-01',
-    vote_average: 8.2,
-    vote_count: 4300,
-    translations: {},
-    user_id: "1"
+    "bookId": 3,
+    "name": "Hermione Granger",
+    "roleName": "Female",
+    "roleDescription": "A brilliant and resourceful young witch who befriends Harry and becomes a vital ally in his quest to understand the magical world and face challenges."
   }
 ]

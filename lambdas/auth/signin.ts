@@ -7,6 +7,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import Ajv from "ajv";
 import schema from "../../shared/types.schema.json";
+import jwt from "jsonwebtoken";
 
 const ajv = new Ajv();
 const isValidBodyParams = ajv.compile(schema.definitions["SignInBody"] || {});
@@ -59,6 +60,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       };
     }
     const token = AuthenticationResult.IdToken;
+    if (!token) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Token is undefined",
+        }),
+      };
+    }
+    const decodedToken = jwt.decode(token) as { sub: string }; // The 'sub' field is typically the user ID in JWTs
 
     return {
       statusCode: 200,
@@ -70,6 +80,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       body: JSON.stringify({
         message: "Auth successfull",
         token: token,
+        userId: decodedToken?.sub,
       }),
     };
   } catch (err) {

@@ -7,9 +7,6 @@
                 "adult": {
                     "type": "boolean"
                 },
-                "backdrop_path": {
-                    "type": "string"
-                },
                 "genre_ids": {
                     "items": {
                         "type": "number"
@@ -34,17 +31,11 @@
                 "popularity": {
                     "type": "number"
                 },
-                "poster_path": {
-                    "type": "string"
-                },
                 "release_date": {
                     "type": "string"
                 },
                 "title": {
                     "type": "string"
-                },
-                "video": {
-                    "type": "boolean"
                 },
                 "vote_average": {
                     "type": "number"
@@ -75,6 +66,40 @@
                 "title",
                 "vote_average",
                 "vote_count"
+            ],
+            "type": "object"
+        },
+        "BookCharacters": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "roleName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "roleName"
+            ],
+            "type": "object"
+        },
+        "BookCastMemberQueryParams": {
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "bookId": {
+                    "type": "string"
+                },
+                "roleName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "bookId"
             ],
             "type": "object"
         },
